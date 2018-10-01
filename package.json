@@ -1,0 +1,64 @@
+{
+  "name": "date-time-checker",
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "Quoc Khanh",
+    "email": "bkdev98@gmail.com",
+    "url": "https://khanhquoc.press"
+  },
+  "main": "src/main.js",
+  "homepage": "./",
+  "build": {
+    "appId": "press.khanhquoc.dtc",
+    "productName": "Date Time Checker",
+    "copyright": "Copyright © 2018 Quoc Khanh",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "dmg",
+      "icon": "src/assets/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/icon.png"
+    },
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "src/**/*",
+      "public/**/*",
+      "src/assets/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    }
+  },
+  "dependencies": {
+    "react": "^16.5.2",
+    "react-desktop": "^0.3.7",
+    "react-dom": "^16.5.2",
+    "react-scripts": "1.1.5",
+    "styled-components": "^3.4.9"
+  },
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "dev": "concurrently \"yarn react-start\" \"wait-on http://localhost:9875/ && DEV_URL=http://localhost:9875/ electron .\"",
+    "start": "electron ./src/main.js",
+    "pack": "electron-builder --dir",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win --x64 --ia32",
+    "build": "yarn react-build && yarn dist:mac && yarn dist:win",
+    "prebuild": "rm -rf ./build && rm -rf ./dist",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1",
+    "electron": "^3.0.2",
+    "electron-builder": "^20.28.4",
+    "eslint": "^5.6.1",
+    "eslint-config-equimper": "^2.2.2",
+    "wait-on": "^3.0.1"
+  }
+}
