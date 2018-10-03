@@ -3,6 +3,7 @@ const path = require('path');
 const url = require('url');
 
 const app = electron.app;
+const dialog = electron.dialog;
 const BrowserWindow = electron.BrowserWindow;
 
 let mainWindow;
@@ -31,6 +32,23 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  mainWindow.on('close', (e) => {
+    if (app.showExitPrompt) {
+      e.preventDefault();
+      dialog.showMessageBox({
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        title: 'Confirm',
+        message: 'Are you sure to exit?',
+      }, (response) => {
+        if (response === 0) {
+          app.showExitPrompt = false;
+          mainWindow.close();
+        }
+      });
+    }
   });
 }
 

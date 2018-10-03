@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button as WButton, TextInput as WTextInput } from 'react-desktop/windows';
-import { Button as MButton, TextInput as MTextInput } from 'react-desktop/macOs';
+import { Button, TextInput } from 'react-desktop/windows';
 
 import logo from './assets/fptu-logo.png';
-
-let Button;
-let TextInput;
-if (process.platform === 'win32') {
-  Button = WButton; TextInput = WTextInput;
-} else {
-  Button = MButton; TextInput = MTextInput;
-}
 
 const Wrapper = styled.div``;
 
@@ -43,7 +34,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: ${process.platform === 'win32' ? '0px' : '10px'};
 `;
 
 const TextField = styled.div`
@@ -59,7 +49,7 @@ const Form = styled.form`
 
 const FieldLabel = styled.p`
   font-family: Arial;
-  margin: ${process.platform === 'win32' ? '0px 0px 18px 0px' : '12px 0px'};
+  margin: 0px 0px 18px 0px;
 `;
 
 class App extends Component {
@@ -67,11 +57,32 @@ class App extends Component {
     day: '',
     month: '',
     year: '',
+    clear: false,
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { day, month, year, clear } = this.state;
+    return (clear ||
+      (nextState.day === day &&
+      nextState.month === month &&
+      nextState.year === year));
+  }
+
+  handleClear = () => {
+    this.setState({
+      day: '',
+      month: '',
+      year: '',
+      clear: true,
+    });
+  }
+
+  handleCheck = () => {
+    const { day, month, year } = this.state;
+    console.log(day, month, year);
   }
 
   render() {
-    const { day, month, year } = this.state;
-
     return (
       <Wrapper>
         <Logo src={logo} />
@@ -82,28 +93,25 @@ class App extends Component {
               <TextField>
                 <FieldLabel>Day</FieldLabel>
                 <TextInput
-                  value={day}
-                  onChange={e => this.setState({ day: e.target.value })}
+                  onChange={e => this.setState({ day: e.target.value, clear: false })}
                 />
               </TextField>
               <TextField>
                 <FieldLabel>Month</FieldLabel>
                 <TextInput
-                  value={month}
-                  onChange={e => this.setState({ month: e.target.value })}
+                  onChange={e => this.setState({ month: e.target.value, clear: false })}
                 />
               </TextField>
               <TextField>
                 <FieldLabel>Year</FieldLabel>
                 <TextInput
-                  value={year}
-                  onChange={e => this.setState({ year: e.target.value })}
+                  onChange={e => this.setState({ year: e.target.value, clear: false })}
                 />
               </TextField>
             </InputWrapper>
             <ButtonWrapper>
-              <Button push>Clear</Button>
-              <Button push color='#298EFF'>Check</Button>
+              <Button push onClick={this.handleClear}>Clear</Button>
+              <Button push color='#298EFF' onClick={this.handleCheck}>Check</Button>
             </ButtonWrapper>
           </Form>
         </Container>
